@@ -1,0 +1,231 @@
+# install necessary packages
+library("tidyverse")
+library("hms")
+library("lubridate")
+library("data.table")
+
+# load project data
+jan_df <- read_csv("202201-divvy-tripdata.csv")
+feb_df <- read_csv("202202-divvy-tripdata.csv")
+mar_df <- read_csv("202203-divvy-tripdata.csv")
+apr_df <- read_csv("202204-divvy-tripdata.csv")
+may_df <- read_csv("202205-divvy-tripdata.csv")
+jun_df <- read_csv("202206-divvy-tripdata.csv")
+jul_df <- read_csv("202207-divvy-tripdata.csv")
+aug_df <- read_csv("202208-divvy-tripdata.csv")
+sep_df <- read_csv("202209-divvy-tripdata.csv")
+oct_df <- read_csv("202210-divvy-tripdata.csv")
+nov_df <- read_csv("202211-divvy-tripdata.csv")
+dec_df <- read_csv("202212-divvy-tripdata.csv")
+
+# merging all into one view
+project_df <- rbind(jan_df,feb_df,mar_df,apr_df,may_df,jun_df,jul_df,aug_df,sep_df,oct_df,nov_df,dec_df)
+
+# remove indvidual data files
+remove(jan_df,feb_df,mar_df,apr_df,may_df,jun_df,jul_df,aug_df,sep_df,oct_df,nov_df,dec_df)
+
+# create new frame to add new columns into
+project_date <- project_df
+
+# add new columns to the data frame
+project_date$date <- as.Date(project_date$started_at, format="%m/%d/%Y")
+project_date$month <- format(as.Date(project_date$date), "%m")
+project_date$day <- format(as.Date(project_date$date), "%d")
+project_date$time <- format(strptime(project_date$started_at, "%H"))
+
+#create column for different seasons
+project_date <- project_date %>% mutate(season = case_when(
+  month == 1 ~ "Winter",
+  month == 2 ~ "Winter",
+  month == 3 ~ "Spring",
+  month == 4 ~ "Spring",
+  month == 5 ~ "Spring",
+  month == 6 ~ "Summer",
+  month == 7 ~ "Summer",
+  month == 8 ~ "Summer",
+  month == 9 ~ "Fall",
+  month == 10 ~ "Fall",
+  month == 11 ~ "Fall",
+  month == 12 ~ "Fall"))
+
+#create column for different day times
+project_date <- project_date %>% 
+  mutate(time_of_day = case_when(
+         hour == 0 ~ "Night",
+         hour == 1 ~ "Night",
+         hour == 2 ~ "Night",
+         hour == 3 ~ "Night",
+         hour == 4 ~ "Night",
+         hour == 5 ~ "Night",
+         hour == 6 ~ "Morning",
+         hour == 7 ~ "Morning",
+         hour == 8 ~ "Morning",
+         hour == 9 ~ "Morning",
+         hour == 10 ~ "Morning",
+         hour == 11 ~ "Morning",
+         hour == 12 ~ "Afternoon",
+         hour == 13 ~ "Afternoon",
+         hour == 14 ~ "Afternoon",
+         hour == 15 ~ "Afternoon",
+         hour == 16 ~ "Afternoon",
+         hour == 17 ~ "Afternoon",
+         hour == 18 ~ "Evening",
+         hour == 19 ~ "Evening",
+         hour == 20 ~ "Evening",
+         hour == 21 ~ "Evening",
+         hour == 22 ~ "Evening",
+         hour == 23 ~ "Evening"))
+
+#change column of months from numbers to names for tableau
+
+project_tableau <- project_date
+project_tableau <- project_tableau %>% 
+  mutate(month = case_when(
+    month == 1 ~ "January",
+    month == 2 ~ "Febraury",
+    month == 3 ~ "March",
+    month == 4 ~ "April",
+    month == 5 ~ "May",
+    month == 6 ~ "June",
+    month == 7 ~ "July",
+    month == 8 ~ "August",
+    month == 9 ~ "September",
+    month == 10 ~ "October",
+    month == 11 ~ "November",
+    month == 12 ~ "December"))
+
+#--------------Data cleaning---------#
+
+project_date <- na.omit(project_date)
+project_date <- distinct(project_date)
+project_date <- project_date %>%
+  select(-c(ride_id, start_station_id, end_station_id,start_lat,start_lng,end_lat,end_lng,))
+
+#cleaning tableau df (rows omitted have no use in visualisation)
+project_tableau <- project_tableau %>% 
+  select(-c(start_station_name, end_station_name, started_at, ended_at))
+
+#--------------Analysis--------------#
+
+#count of member types
+project_date %>%
+  group_by(member_casual) %>%
+  count(member_casual)
+
+#total rides by bike type
+project_date %>% 
+  group_by(rideable_type) %>% 
+  count(rideable_type)
+
+#total rides by bike type, member type
+project_date %>% 
+  group_by(member_casual, rideable_type) %>% 
+  count(rideable_type)
+
+#total rides by month
+project_date %>% 
+  group_by(month) %>% 
+  count(month) %>% 
+  print(n=12)
+
+#total rides by season
+project_date %>% 
+  group_by(season) %>% 
+  count(season)
+
+project_date %>% 
+  group_by(member_casual) %>% 
+  filter(season == "Winter") %>% 
+  count(season)
+
+project_date %>% 
+  group_by(member_casual) %>% 
+  filter(season == "Spring") %>% 
+  count(season)
+
+project_date %>% 
+  group_by(member_casual) %>% 
+  filter(season == "Summer") %>% 
+  count(season)
+
+project_date %>% 
+  group_by(member_casual) %>% 
+  filter(season == "Fall") %>% 
+  count(season)
+
+#total rides by day of month
+project_date %>% 
+  group_by(day) %>% 
+  count(day) %>% 
+  print(n =31)
+
+#total rides by day of week
+project_date %>% 
+  group_by(day_of_week) %>% 
+  count(day_of_week)
+
+#total rides by time of day
+project_date %>% 
+  group_by(time_of_day) %>% 
+  count(time_of_day)
+
+project_date %>% 
+  filter(time_of_day == "Morning") %>% 
+  count(time_of_day)
+
+project_date %>% 
+  filter(time_of_day == "Afternoon") %>% 
+  count(time_of_day)
+
+project_date %>% 
+  filter(time_of_day == "Evening") %>% 
+  count(time_of_day)
+
+project_date %>% 
+  filter(time_of_day == "Night") %>% 
+  count(time_of_day)
+
+#total rides for each day hour
+project_date %>%
+  count(hour) %>% 
+  print(n=24)
+
+#the following analysis shows the difference between members and causal users.
+#to view absolute average, remove field (member_causal)
+#average ride length
+project_avgRide <- mean(project_date$ride_length)
+
+#average ride length by member type
+project_date %>%
+  group_by(member_casual) %>% 
+  summarise_at(vars(ride_length),list(time = mean))
+
+#average ride length by bike type
+project_date %>%
+  group_by(rideable_type, member_casual) %>% 
+  summarise_at(vars(ride_length),list(time = mean))
+
+#average ride length by season
+project_date %>% 
+  group_by(season, member_casual) %>%
+  summarise_at(vars(ride_length),list(time = mean))
+
+#average ride length by month
+project_date %>% 
+  group_by(month, member_casual) %>%
+  summarise_at(vars(ride_length), list(time = mean)) %>% 
+  print(n=24)
+  
+#average ride length by time of day
+project_date %>% 
+  group_by(time_of_day, member_casual) %>% 
+  summarise_at(vars(ride_length), list(time = mean))
+
+#average ride length by hour
+project_date %>% 
+  group_by(hour, member_casual) %>% 
+  summarise_at(vars(ride_length), list(time = mean)) %>% 
+  print(n=48)
+
+#download data for visualisation
+fwrite(project_tableau, "project_data.csv")
