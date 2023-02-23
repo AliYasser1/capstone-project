@@ -1,10 +1,10 @@
-# install necessary packages
+#install necessary packages
 library("tidyverse")
 library("hms")
 library("lubridate")
 library("data.table")
 
-# load project data
+#load project data
 jan_df <- read_csv("202201-divvy-tripdata.csv")
 feb_df <- read_csv("202202-divvy-tripdata.csv")
 mar_df <- read_csv("202203-divvy-tripdata.csv")
@@ -18,16 +18,16 @@ oct_df <- read_csv("202210-divvy-tripdata.csv")
 nov_df <- read_csv("202211-divvy-tripdata.csv")
 dec_df <- read_csv("202212-divvy-tripdata.csv")
 
-# merging all into one view
+#merging all into one view
 project_df <- rbind(jan_df,feb_df,mar_df,apr_df,may_df,jun_df,jul_df,aug_df,sep_df,oct_df,nov_df,dec_df)
 
-# remove indvidual data files
+#remove indvidual data files
 remove(jan_df,feb_df,mar_df,apr_df,may_df,jun_df,jul_df,aug_df,sep_df,oct_df,nov_df,dec_df)
 
-# create new frame to add new columns into
+#create new frame to add new columns into
 project_date <- project_df
 
-# add new columns to the data frame
+#add new columns to the data frame
 project_date$date <- as.Date(project_date$started_at, format="%m/%d/%Y")
 project_date$month <- format(as.Date(project_date$date), "%m")
 project_date$day <- format(as.Date(project_date$date), "%d")
