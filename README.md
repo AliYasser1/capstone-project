@@ -12,6 +12,8 @@ for the company to develop the best startegy it needs to know the following:
 
 The goal of this project is to answer the first and most important question: (**How do annual members and casual riders use Cyclistic bikes differently?**)
 
+### Note: this is not a detailed report. For extensive and detailed report see 
+
 # Step 1: Ask
 
 The main problem we are trying to solve is how we can expand the market share of **Cycalistic**. The designed strategy is to convert causual users into
