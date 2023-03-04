@@ -67,6 +67,8 @@ The following is darft dashboard made for the project (**NOT FINAL!!**)
 
 ![image](https://user-images.githubusercontent.com/121754948/222603755-a0b7554e-b444-4661-8808-42f912b627be.png)
 
+## For final Tableau Vizualisation see [here](https://public.tableau.com/app/profile/ali28508112/viz/GoogleCapstoneProjectCycalistic/FinalViz?publish=yes)
+
 ## Key finding:
 - Majorty of users are members with 59.76%.
 - Rush hours are the Afternoon hours where it peaks at exactly 5PM.
