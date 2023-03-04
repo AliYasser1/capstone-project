@@ -12,7 +12,7 @@ for the company to develop the best startegy it needs to know the following:
 
 The goal of this project is to answer the first and most important question: (**How do annual members and casual riders use Cyclistic bikes differently?**)
 
-### Note: this is not a detailed report. For extensive and detailed report see 
+### Note: this is not a detailed report. For extensive and detailed report see [here](https://github.com/AliYasser1/capstone-project/new/main)
 
 # Step 1: Ask
 
