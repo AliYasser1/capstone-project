@@ -21,7 +21,7 @@ dec_df <- read_csv("202212-divvy-tripdata.csv")
 # merging all into one view
 project_df <- rbind(jan_df,feb_df,mar_df,apr_df,may_df,jun_df,jul_df,aug_df,sep_df,oct_df,nov_df,dec_df)
 
-# remove indvidual data files
+# remove individual data files
 remove(jan_df,feb_df,mar_df,apr_df,may_df,jun_df,jul_df,aug_df,sep_df,oct_df,nov_df,dec_df)
 
 # create new frame to add new columns into
@@ -109,7 +109,7 @@ project_tableau <- project_tableau %>%
 project_date <- na.omit(project_date)
 project_date <- distinct(project_date)
 project_date <- project_date %>%
-  select(-c(ride_id, start_station_id, end_station_id,start_lat,start_lng,end_lat,end_lng,))
+  select(-c(ride_id, start_station_id, end_station_id,start_lat,start_lng,end_lat,end_lng))
 
 #cleaning tableau df (rows omitted have no use in visualisation)
 project_tableau <- project_tableau %>% 
@@ -237,5 +237,5 @@ project_date %>%
   summarise_at(vars(ride_length), list(time = mean)) %>% 
   print(n=48)
 
-#download data for visualisation
+#download data for visualization
 fwrite(project_tableau, "project_data.csv")
