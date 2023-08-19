@@ -4,7 +4,7 @@
 
 In this file I recorded all the step I followed and how I came to each conclusion.
 It will include thought process, codes, graphes, and calculations. For the sake of brevity I will not include all the problems or mistakes I faced during my 
-work on this project. However I will mention why I followed certain methods over others.
+work on this project. However I will mention why I chose to follow certain methods over others.
 
 ## Business Task
 Identify key behavioural differences between members and casual riders. Or in other words, How do annual members and casual riders use Cyclistic bikes differently?
